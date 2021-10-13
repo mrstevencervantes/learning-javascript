@@ -1,1 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker</title>
+</head>
+
+<body>
+    <h1>Color Picker</h1>
+    <div id="start"> Start Game</div>
+    <div id="gamearea">
+        <div id="findme">Match this color<br>
+            <span id="message"></span></div>
+        <div id="output"></div>
+    </div>
+    <!-- Commenting out src and using github js source.
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    -->
+    <script src="/learning-javascript/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var colorArray = [];
+            $('#gamearea').hide();
+            $('#start').click(startGame);
+            $('#output').on('click', '.cell', checkCell);
+            $('#start').css({
+                border: '1px solid black',
+                textAlign: 'center',
+                padding: '10px',
+                width: '150px',
+                backgroundColor: 'red',
+                fontSize: '2em',
+                marginBottom: '10px',
+                color: 'white'
+            })
+            $('#findme').css({
+                border: '1px solid black',
+                textAlign: 'center',
+                padding: '0',
+                width: '400px',
+                height: '100px',
+                fontSize: '2em',
+                display: 'inline-block',
+                marginBottom: '10px'
+            })
+
+            function checkCell() {
+                var curColor = $(this).css('backgroundColor');
+                if (curColor == $('#findme').css('backgroundColor')) {
+                    var cntValue = Number($(this).text());
+                    cntValue++;
+                    $(this).text(cntValue);
+                    $(this).css('backgroundColor', addNewColor());
+                    pickMyColor();
+                    $('#message').html('Correct');
+                } else {
+                    $('#message').html('Wrong color');
+                }
+            }
+
+            function startGame() {
+                $('body').css('background-color','grey');
+                $('#gamearea').show();
+                $('#start').hide();
+                makeBoard();
+                pickMyColor();
+            }
+
+            function addNewColor() {
+                var trackColor = randomColor();
+                colorArray.push(trackColor);
+                return trackColor;
+            }
+
+            function makeBoard() {
+                var x = 4;
+                var html = '';
+                for (var row = 0; row < x; row++) {
+                    html += '<div class = "row">';
+                    for (var col = 0; col < x; col++) {
+                        html += '<div class="cell" style="background-color:' + addNewColor() + '">0</div>'
+                    }
+                    html += "</div>";
+                }
+                $('#output').html(html);
+                $('.cell').css({
+                    border: '1px solid black',
+                    textAlign: 'center',
+                    padding: '0',
+                    margin: '0',
+                    width: '100px',
+                    height: '100px',
+                    fontSize: '2em',
+                    display: 'inline-block',
+                    marginBottom: '10px'
+                })
+            }
+
+            function pickMyColor() {
+                var index = Math.floor(Math.random() * colorArray.length);
+                var picked = colorArray.splice(index, 1);
+                $('#findme').css('background-color', picked);
+            }
+
+            function randomColor() {
+                //return '#' + ((1 << 24) * Math.random() | 0).toString(16);
+                var r = Math.floor(Math.random() * 256);
+                var b = Math.floor(Math.random() * 256);
+                var g = Math.floor(Math.random() * 256);
+                var rgb = 'rgb(' + r + ',' + g + ',' + b + ')';
+                return rgb;
+            }
+        })
+    </script>
+</body>
+</html>
